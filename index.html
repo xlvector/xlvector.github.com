@@ -29,7 +29,7 @@ title: Homepage
         <span>
     </div>
     <div class="post-entry">
-        {{  post.content  }}
+        {{  post.content || split:'<!--more-->' | first }}
     </div>
     <div class="post-footer">
         <div class="read-more">
