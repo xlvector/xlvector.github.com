@@ -22,3 +22,5 @@ tags: golang crawler architecture
 1. downloader : 输入一个url，返回这个url对应的HTML
 2. link extractor : 输入一个HTML，返回这个HTML中的链接
 3. redirector : 负责接收link extractor提取的链接，并且将这些链接转发给downloader
+
+不过，因为downloader主要消耗网络资源，而link extractor主要消耗CPU资源，因此我们可以将1，2部分合并在一个程序中。
