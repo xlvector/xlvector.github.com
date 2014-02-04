@@ -1,0 +1,24 @@
+---
+layout: post
+title: 基于Golang的分布式爬虫框架
+categories: golang crawler
+tags: golang crawler architecture
+---
+
+爬虫是数据搜集系统中的一个重要工具，主要用于从Web上搜集数据。一般一个爬虫的流程如下：
+
+	func Crawler(seed_url):
+		Q = Queue()
+		Q.append(seed_url)
+		while !Q.empty() :
+			link = Q.pop()
+			html = download(link)
+			sub_links = extract_links(html)
+			for link in sub_links:
+				Q.append(link)
+
+如果我们要设计一个分布式爬虫，可以将上述程序分成3个部分：
+
+1. downloader : 输入一个url，返回这个url对应的HTML
+2. link extractor : 输入一个HTML，返回这个HTML中的链接
+3. redirector : 负责接收link extractor提取的链接，并且将这些链接转发给downloader
