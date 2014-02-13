@@ -2,7 +2,7 @@
 layout: post
 title: Parse Excel with Python
 categories: python
-tags: python
+tags: python excel
 ---
 
 Excel一般要通过微软的工具比如C#才可以解析，不过其实Python也可以解析，而且不仅仅windows平台的python可以，mac和linux的python都可以。python解析主要通过一个叫做xlrd的库，可以按照如下方法安装：
