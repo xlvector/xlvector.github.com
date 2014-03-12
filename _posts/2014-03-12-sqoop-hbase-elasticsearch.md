@@ -19,10 +19,10 @@ tags: sqoop, hbase, elasticsearch
 
 这里增加了HBase这一层主要是基于以下的考虑：
 
-# 我们要索引的表可能存在MySQL上，也可能存储在Oracle上，或者DB2上。我们通过HBase将数据库和搜索引擎解耦。
-# HBase支持版本。对于每一个值都会纪录最近的几个版本。这使得HBase到搜索引擎的增量索引很容易实现。因为我们只需要索引版本发生变化的值。
-# HBase可以存储稀疏的数据，对于数据库中为NULL的列可以不存储。
-# 有的时候我们需要索引的文档来自很多表join之后的结果。直接在数据库上做大表的join会导致严重的性能问题。而HBase可以通过MapReduce 进行Join。
+1. 我们要索引的表可能存在MySQL上，也可能存储在Oracle上，或者DB2上。我们通过HBase将数据库和搜索引擎解耦。
+2. HBase支持版本。对于每一个值都会纪录最近的几个版本。这使得HBase到搜索引擎的增量索引很容易实现。因为我们只需要索引版本发生变化的值。
+3. HBase可以存储稀疏的数据，对于数据库中为NULL的列可以不存储。
+4. 有的时候我们需要索引的文档来自很多表join之后的结果。直接在数据库上做大表的join会导致严重的性能问题。而HBase可以通过MapReduce 进行Join。
 
 为了将不同数据库中的数据导入到HBase，我们用到了Sqoop。Sqoop的坑比较多，我就举一个例子
 
@@ -30,6 +30,6 @@ tags: sqoop, hbase, elasticsearch
 
 所以整个系统的流程是
 
-# Sqoop将数据从关系型数据库导入到HBase
-# 定期跑MapReduce 任务，对不同的表进行Join，生成文档
-# 将文档发送给ES进行索引
+1. Sqoop将数据从关系型数据库导入到HBase
+2. 定期跑MapReduce 任务，对不同的表进行Join，生成文档
+3. 将文档发送给ES进行索引
