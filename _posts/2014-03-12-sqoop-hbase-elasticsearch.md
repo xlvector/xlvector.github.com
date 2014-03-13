@@ -24,12 +24,15 @@ tags: sqoop, hbase, elasticsearch
 3. HBase可以存储稀疏的数据，对于数据库中为NULL的列可以不存储。
 4. 有的时候我们需要索引的文档来自很多表join之后的结果。直接在数据库上做大表的join会导致严重的性能问题。而HBase可以通过MapReduce 进行Join。
 
-为了将不同数据库中的数据导入到HBase，我们用到了Sqoop。Sqoop的坑比较多，我就举一个例子
-
-	如果用Sqoop导入表到HBase中，必须得指定一个MySQL的主键作为HBase的row key。但是默认情况下这个主键作为row key后就不会同时存储到value中。
+为了将不同数据库中的数据导入到HBase，我们用到了Sqoop。
 
 所以整个系统的流程是
 
 1. Sqoop将数据从关系型数据库导入到HBase
 2. 定期跑MapReduce 任务，对不同的表进行Join，生成文档
 3. 将文档发送给ES进行索引
+
+好，下面总结一下解决这个问题的过程中可能遇到的坑
+
+1. 如果用Sqoop导入表到HBase中，必须得指定一个MySQL的主键作为HBase的row key。但是默认情况下这个主键作为row key后就不会同时存储到value中。
+2. 如果用MapReduce对HBase的表进行Join时，因为我们要拿到上个版本和当前版本的数据，需要设置 scan.setMaxVersions(2) 这个代表取最近的2个版本的数据。
