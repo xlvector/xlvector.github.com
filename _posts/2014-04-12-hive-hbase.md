@@ -34,6 +34,6 @@ Hive和HBase是Hadoop生态圈的两个重要工具。Hive是个数据仓库，�
 
 关于HBase和Hive的集成，可以参考下面的文章：
 
-1. http://hortonworks.com/blog/hbase-via-hive-part-1/
-2. http://hortonworks.com/blog/using-hive-to-interact-with-hbase-part-2/
+1. [Hbase via Hive part 1](http://hortonworks.com/blog/hbase-via-hive-part-1/)
+2. [Hbase via Hive part 2](http://hortonworks.com/blog/using-hive-to-interact-with-hbase-part-2/)
 
