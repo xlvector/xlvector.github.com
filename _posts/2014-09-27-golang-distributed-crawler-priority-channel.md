@@ -8,8 +8,11 @@ tags: golang crawler architecture channel priority
 一个定向爬虫需要抓取不同优先级的任务，Golang的channel可以很容易的用来实现一个FIFO的消息队列，因此我们的任务就是基于channel实现一个优先级的消息队列。传统的优先级队列是基于堆实现的。但如果我们要利用堆实现一个多生产者－单消费者模式的消息队列，不可避免的要实现一堆锁的逻辑，所以我们想尽量使用现有的channel。
 
 爬虫的应用场景满足下面两个条件
+
 1. 优先级是整数
 2. 优先级的数量是有限的，一般也就不超过10个优先级
+
+因此，我们可以通过一个channel的数组来实现一个优先级队列
 
 
 	type PChanError struct {
