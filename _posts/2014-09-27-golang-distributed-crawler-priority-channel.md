@@ -37,7 +37,6 @@ tags: golang crawler architecture channel priority
 		sleepMS  time.Duration
 		closeAll bool
 		capacity int
-		ct       *counter.Counter
 	}
 
 	func NewPChan(levels int, capacity int) *PChan {
@@ -46,25 +45,10 @@ tags: golang crawler architecture channel priority
 		ret.sleepMS = 1
 		ret.closeAll = false
 		ret.capacity = capacity
-		ret.ct = counter.NewCounter()
 		for i := 0; i < levels; i++ {
 			ret.chs = append(ret.chs, make(chan interface{}, capacity*(i+1)))
 		}
 		return &ret
-	}
-
-	func (self *PChan) Stat() map[string]interface{} {
-		ret := make(map[string]interface{})
-		ret["sleepMS"] = self.sleepMS
-		ret["capacity"] = self.capacity
-		ret["closeAll"] = self.closeAll
-		chanStat := []int{}
-		for _, ch := range self.chs {
-			chanStat = append(chanStat, len(ch))
-		}
-		ret["chs"] = chanStat
-		ret["counter"] = self.ct.Stat()
-		return ret
 	}
 
 	func (self *PChan) Close() {
@@ -76,16 +60,12 @@ tags: golang crawler architecture channel priority
 
 	func (self *PChan) Push(priority int, val interface{}) error {
 		if priority >= len(self.chs) || priority < 0 {
-			self.ct.Incr("pchannel.err.priority_out_of_index", 1)
 			return NewPChanError(PRIORITY_OUT_OF_INDEX)
 		}
 		idx := len(self.chs) - priority - 1
 		if len(self.chs[idx]) == self.capacity*(priority+1) {
-			self.ct.Incr("pchannel.err.channel_full", 1)
 			return NewPChanError(CHANNEL_FULL)
 		}
-		self.ct.Incr("pchannel.push", 1)
-		self.ct.Incr("pchannel.push.priority."+strconv.Itoa(priority), 1)
 		self.chs[idx] <- val
 		return nil
 	}
@@ -94,8 +74,6 @@ tags: golang crawler architecture channel priority
 		for k, ch := range self.chs {
 			if len(ch) > 0 {
 				self.sleepMS = 1
-				self.ct.Incr("pchannel.pop", 1)
-				self.ct.Incr("pchannel.pop.priority."+strconv.Itoa(len(self.chs)-k-1), 1)
 				return <-ch, nil
 			}
 		}
@@ -114,8 +92,6 @@ tags: golang crawler architecture channel priority
 		for k, ch := range self.chs {
 			if len(ch) > 0 {
 				self.sleepMS = 1
-				self.ct.Incr("pchannel.pop", 1)
-				self.ct.Incr("pchannel.pop.priority."+strconv.Itoa(len(self.chs)-k-1), 1)
 				return <-ch, nil
 			}
 		}
