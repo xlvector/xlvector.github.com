@@ -12,30 +12,14 @@ tags: golang crawler architecture channel priority
 1. 优先级是整数
 2. 优先级的数量是有限的，一般也就不超过10个优先级
 
-因此，我们可以通过一个channel的数组来实现一个优先级队列
+因此，我们可以通过一个channel的数组来实现一个优先级队列。
 
+首先，定义一个PChan的结构
 
-	type PChanError struct {
-		Code int
-	}
-
-	func NewPChanError(code int) *PChanError {
-		return &PChanError{Code: code}
-	}
-
-	func (self *PChanError) Error() string {
-		if self.Code == CHANNEL_FULL {
-			return "channel is full"
-		} else if self.Code == PRIORITY_OUT_OF_INDEX {
-			return "priority out of index"
-		}
-		return ""
-	}
 
 	type PChan struct {
-		chs      []chan interface{}
+		chs      []chan interface{} //定义
 		sleepMS  time.Duration
-		closeAll bool
 		capacity int
 	}
 
@@ -43,20 +27,14 @@ tags: golang crawler architecture channel priority
 		ret := PChan{}
 		ret.chs = []chan interface{}{}
 		ret.sleepMS = 1
-		ret.closeAll = false
 		ret.capacity = capacity
 		for i := 0; i < levels; i++ {
-			ret.chs = append(ret.chs, make(chan interface{}, capacity*(i+1)))
+			ret.chs = append(ret.chs, make(chan interface{}, capacity))
 		}
 		return &ret
 	}
 
-	func (self *PChan) Close() {
-		for _, ch := range self.chs {
-			close(ch)
-		}
-		self.closeAll = true
-	}
+对于一个消息队列来说，主要的接口就是Push和Pop。Push很容易实现：
 
 	func (self *PChan) Push(priority int, val interface{}) error {
 		if priority >= len(self.chs) || priority < 0 {
@@ -69,6 +47,9 @@ tags: golang crawler architecture channel priority
 		self.chs[idx] <- val
 		return nil
 	}
+
+核心就是如何实现Pop。这里使用的方法是从高优先级的channel开始往低优先级的channel扫，如果发现一个channel有元素，就返回。
+如果所有的channel都没有元素，就sleep一段时间，防止CPU空转。
 
 	func (self *PChan) Pop() (interface{}, error) {
 		for k, ch := range self.chs {
@@ -84,19 +65,6 @@ tags: golang crawler architecture channel priority
 		self.sleepMS *= 2
 		if self.sleepMS > 1000 {
 			self.sleepMS = 1000
-		}
-		return nil, nil
-	}
-
-	func (self *PChan) QuickPop() (interface{}, error) {
-		for k, ch := range self.chs {
-			if len(ch) > 0 {
-				self.sleepMS = 1
-				return <-ch, nil
-			}
-		}
-		if self.closeAll {
-			return nil, errors.New("channel is closed")
 		}
 		return nil, nil
 	}
