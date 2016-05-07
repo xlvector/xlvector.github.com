@@ -17,11 +17,11 @@ EGONE I6V72 Q54NY WC2V9 ZO25W
 
 我们知道LSTM的训练需要给两个序列，一个是输入序列，一个是目标序列。那么在上面这个排序问题中，输入字符串就是：
 
-WC2V9 EGONE I6V72 Q54NY ZO25W _ _ _ _
+WC2V9 EGONE I6V72 Q54NY ZO25W _ _ _ _ _
 
 而目标序列就是
 
-_ _ _ _ EGONE I6V72 Q54NY WC2V9 ZO25W
+_ _ _ _ _ EGONE I6V72 Q54NY WC2V9 ZO25W
 
 我们用mxnet的LSTM来训练这个模型。
 
