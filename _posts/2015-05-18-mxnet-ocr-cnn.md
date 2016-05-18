@@ -30,7 +30,7 @@ OCR是一个古老的问题。这里我们考虑一类特殊的OCR问题，就�
 
 首先，我们定义一个迭代器来输入数据，这里我们每次都直接调用python-captcha这个库来根据随机生成的label来生成相应的验证码图片。这样我们的训练集相当于是无穷大的。
 
-    `
+    
     class OCRIter(mx.io.DataIter):
     def __init__(self, count, batch_size, num_label, height, width):
         super(OCRIter, self).__init__()
@@ -70,4 +70,32 @@ OCR是一个古老的问题。这里我们考虑一类特殊的OCR问题，就�
 
     def reset(self):
         pass
-    `
+    
+然后我们用如下的网络来训练这个数据集：
+
+    def get_ocrnet():
+        data = mx.symbol.Variable('data')
+        label = mx.symbol.Variable('softmax_label')
+        conv1 = mx.symbol.Convolution(data=data, kernel=(5,5), num_filter=32)
+        pool1 = mx.symbol.Pooling(data=conv1, pool_type="max", kernel=(2,2), stride=(1, 1))
+        relu1 = mx.symbol.Activation(data=pool1, act_type="relu")
+
+        conv2 = mx.symbol.Convolution(data=relu1, kernel=(5,5), num_filter=32)
+        pool2 = mx.symbol.Pooling(data=conv2, pool_type="avg", kernel=(2,2), stride=(1, 1))
+        relu2 = mx.symbol.Activation(data=pool2, act_type="relu")
+
+        conv3 = mx.symbol.Convolution(data=relu2, kernel=(3,3), num_filter=32)
+        pool3 = mx.symbol.Pooling(data=conv3, pool_type="avg", kernel=(2,2), stride=(1, 1))
+        relu3 = mx.symbol.Activation(data=pool3, act_type="relu")
+
+        flatten = mx.symbol.Flatten(data = relu3)
+        fc1 = mx.symbol.FullyConnected(data = flatten, num_hidden = 512)
+        fc21 = mx.symbol.FullyConnected(data = fc1, num_hidden = 10)
+        fc22 = mx.symbol.FullyConnected(data = fc1, num_hidden = 10)
+        fc23 = mx.symbol.FullyConnected(data = fc1, num_hidden = 10)
+        fc24 = mx.symbol.FullyConnected(data = fc1, num_hidden = 10)
+        fc2 = mx.symbol.Concat(*[fc21, fc22, fc23, fc24], dim = 0)
+        label = mx.symbol.transpose(data = label)
+        label = mx.symbol.Reshape(data = label, target_shape = (0, ))
+        return mx.symbol.SoftmaxOutput(data = fc2, label = label, name = "softmax")
+
