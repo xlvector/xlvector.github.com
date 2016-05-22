@@ -103,3 +103,26 @@ OCR是一个古老的问题。这里我们考虑一类特殊的OCR问题，就�
 
 全部的代码请参考 [https://gist.github.com/xlvector/6923ef145e59de44ed06f21228f2f879](https://gist.github.com/xlvector/6923ef145e59de44ed06f21228f2f879)
 
+更新，经过比较长时间的训练，精度可以达到98%左右，最后几轮迭代的结果如下：
+
+    2016-05-22 21:58:34,859 Epoch[14] Batch [1250]  Speed: 117.29 samples/sec   Train-Accuracy=0.980800
+    2016-05-22 21:58:48,527 Epoch[14] Batch [1300]  Speed: 117.06 samples/sec   Train-Accuracy=0.982000
+    2016-05-22 21:59:02,174 Epoch[14] Batch [1350]  Speed: 117.24 samples/sec   Train-Accuracy=0.981200
+    2016-05-22 21:59:16,509 Epoch[14] Batch [1400]  Speed: 111.62 samples/sec   Train-Accuracy=0.976800
+    2016-05-22 21:59:31,031 Epoch[14] Batch [1450]  Speed: 110.18 samples/sec   Train-Accuracy=0.975600
+    2016-05-22 21:59:45,323 Epoch[14] Batch [1500]  Speed: 111.95 samples/sec   Train-Accuracy=0.975600
+    2016-05-22 21:59:59,634 Epoch[14] Batch [1550]  Speed: 111.81 samples/sec   Train-Accuracy=0.985600
+    2016-05-22 22:00:13,997 Epoch[14] Batch [1600]  Speed: 111.39 samples/sec   Train-Accuracy=0.978800
+    2016-05-22 22:00:28,270 Epoch[14] Batch [1650]  Speed: 112.11 samples/sec   Train-Accuracy=0.983200
+    2016-05-22 22:00:42,713 Epoch[14] Batch [1700]  Speed: 110.78 samples/sec   Train-Accuracy=0.985200
+    2016-05-22 22:00:56,668 Epoch[14] Batch [1750]  Speed: 114.65 samples/sec   Train-Accuracy=0.975600
+    2016-05-22 22:01:11,000 Epoch[14] Batch [1800]  Speed: 111.64 samples/sec   Train-Accuracy=0.981200
+    2016-05-22 22:01:25,450 Epoch[14] Batch [1850]  Speed: 110.73 samples/sec   Train-Accuracy=0.979600
+    2016-05-22 22:01:39,860 Epoch[14] Batch [1900]  Speed: 111.03 samples/sec   Train-Accuracy=0.978400
+    2016-05-22 22:01:54,272 Epoch[14] Batch [1950]  Speed: 111.02 samples/sec   Train-Accuracy=0.978800
+    2016-05-22 22:02:08,939 Epoch[14] Batch [2000]  Speed: 109.09 samples/sec   Train-Accuracy=0.981600
+    2016-05-22 22:02:08,939 Epoch[14] Resetting Data Iterator
+    2016-05-22 22:02:08,939 Epoch[14] Time cost=568.681
+    2016-05-22 22:02:14,124 Epoch[14] Validation-Accuracy=0.986000
+
+另外[这个Slide](http://www.cs.sjsu.edu/faculty/pollett/masters/Semesters/Spring15/geetika/CS298%20Slides%20-%20PDF)提供了关于深度学习进行验证码识别的详细描述。
