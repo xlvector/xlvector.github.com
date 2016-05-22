@@ -1,4 +1,4 @@
-<div class="ds-share" data-thread-key="" data-title="{{ page.title }}" data-images="" data-content="{{ content }}" data-url="{{ page.url }}">
+<div class="ds-share" data-thread-key="" data-title="{{ page.title }}" data-images="" data-content="" data-url="{{ page.url }}">
     <div class="ds-share-inline">
       <ul  class="ds-share-icons-16">
       	
