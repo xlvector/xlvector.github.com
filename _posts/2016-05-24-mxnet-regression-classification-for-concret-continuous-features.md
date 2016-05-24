@@ -49,6 +49,7 @@ tags: mxnet regression classification
     net = mx.symbol.FullyConnected(data = net, num_hidden = 100, name = "fc2")
     net = mx.symbol.Activation(data = net, act_type="relu")
     net = mx.symbol.FullyConnected(data = net, num_hidden = 1, name = "fc3")
+    # 这里最后为什么用relu呢？是因为价格一定是个正数
     net = mx.symbol.Activation(data = net, act_type="relu")
     net = mx.symbol.LinearRegressionOutput(data = net, label = price, name = "lro")
 
