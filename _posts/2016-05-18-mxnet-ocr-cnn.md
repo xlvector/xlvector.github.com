@@ -126,3 +126,5 @@ OCR是一个古老的问题。这里我们考虑一类特殊的OCR问题，就�
     2016-05-22 22:02:14,124 Epoch[14] Validation-Accuracy=0.986000
 
 另外[这个Slide](http://www.cs.sjsu.edu/faculty/pollett/masters/Semesters/Spring15/geetika/CS298%20Slides%20-%20PDF)提供了关于深度学习进行验证码识别的详细描述。
+
+更新 2016-05-31 ：增加了inference的代码，所有代码在 [https://github.com/xlvector/learning-dl/tree/master/mxnet/ocr](https://github.com/xlvector/learning-dl/tree/master/mxnet/ocr)
