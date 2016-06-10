@@ -31,7 +31,7 @@ LR的解法有很多种，PRML那本书上就提到了不下5种LR的优化方�
             const int *csrColIndA, const float *x, 
             const float *beta, float *y)
 
-我首先用cusparse实现了一个版本，具体代码见 (dot_cusparse.cu)[https://github.com/xlvector/learning-dl/blob/master/cuda/lr/dot_cusparse.cu]。不过很不幸的是实现出来的速度还不如CPU的版本。所以我也没继续做优化，就放弃了CUSPARSE，准备完全自己实现。（按照后来的经验，如果继续优化，是有可能优化的比较快的，所以读者可以试一试）。
+我首先用cusparse实现了一个版本，具体代码见 [dot_cusparse.cu](https://github.com/xlvector/learning-dl/blob/master/cuda/lr/dot_cusparse.cu)。不过很不幸的是实现出来的速度还不如CPU的版本。所以我也没继续做优化，就放弃了CUSPARSE，准备完全自己实现。（按照后来的经验，如果继续优化，是有可能优化的比较快的，所以读者可以试一试）。
 
 后来我想，其实如果用COO的表示方法，其实可以很简单的直接实现Xw的乘法，代码如下：
 
@@ -118,7 +118,7 @@ ret是dot的返回，也就是Xw的计算结果，是1个n维的向量，下面�
       }
     }
 
-整个程序并不复杂，所有代码见(这里)[https://github.com/xlvector/learning-dl/blob/master/cuda/lr/dot.cu]。这里也没有考虑多线程和多卡。其中优化的点有几个：
+整个程序并不复杂，所有代码见[这里](https://github.com/xlvector/learning-dl/blob/master/cuda/lr/dot.cu)。这里也没有考虑多线程和多卡。其中优化的点有几个：
 
     1. 样本是在CPU内存中生成的，而计算是在GPU中完成的。所以就涉及到CPU向GPU内存拷贝的问题。我们是在vec2coo函数中完成这一步的。
     2. 因为不考虑多线程和多卡，因此CPU的内存可以预先分配好（zeroCooMatrixHost)。GPU的内存也可以事先分配好(zeroCooMatrix)。否则malloc和cudaMalloc将是最耗时的函数。
