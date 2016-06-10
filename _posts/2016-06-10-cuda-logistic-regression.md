@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 用GUDA实现一个稀疏的Logistic Regression
+title: 用CUDA实现一个稀疏的Logistic Regression
 categories: cuda
 tags: cuda gpu lr
 ---
